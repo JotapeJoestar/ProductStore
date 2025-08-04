@@ -1,0 +1,58 @@
+.card {
+  .thumbs-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .thumb {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+      border-radius: 0.5rem;
+
+      &.selected {
+        border-color: #E8A700;
+      }
+    }
+  }
+
+  .main-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+
+    .main-image {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 0.5rem;
+    }
+
+    .zoom-lens {
+      position: absolute;
+      pointer-events: none;
+      border: 2px solid #E8A700;
+      border-radius: 50%;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 10;
+    }
+  }
+
+  .card-title {
+    color: var(--text-color); 
+  }
+
+  .card-text {
+    color: inherit; 
+  }
+
+  .fw-bold {
+    color: var(--text-color); 
+  }
+
+}

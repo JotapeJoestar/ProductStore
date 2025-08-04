@@ -1,0 +1,76 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #E8A700;
+    --card-bg: #f8f9fa;
+    --btn-bg: #E8A700;
+    --btn-color: #ffffff;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #E8A700;
+    --card-bg: #1e1e1e;
+    --btn-bg: #E8A700;
+    --btn-color: #ffffff;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: #212529;
+}
+
+.dark-mode body {
+  color: #f1f1f1; 
+}
+
+
+.card {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.btn-primary {
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+}
+
+body,
+.card,
+.btn {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card {
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #c0c0c0; 
+
+/*     &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    } */
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .btn {
+        border-radius: 50px;
+    }
+
+    .btn-outline-yellow {
+        color: var(--btn-bg);
+        border: 1.5px solid var(--btn-bg);
+        background: transparent;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+        border-color: #E8A700;
+    }
+
+    .btn-outline-yellow:hover,
+    .btn-outline-yellow:focus {
+        background: var(--btn-bg);
+        color: var(--btn-color);
+        border-color: var(--btn-bg);
+    }
+}
