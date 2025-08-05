@@ -1,4 +1,38 @@
 .card {
+  color: #c0c0c0;
+
+  .image-wrapper {
+    position: relative;
+    display: flex;
+    align-items: start;
+  }
+
+  .zoom-viewer {
+    position: absolute;
+    left: 630px;
+    top: 0;
+    width: 300px;
+    height: 300px;
+    background-repeat: no-repeat;
+    border: 1px solid #ccc;
+    z-index: 10;
+    background-size: 200%;
+  }
+
+  .card-title {
+    color: #E8A700;
+  }
+
+  .btn-outline-yellow {
+    color: #E8A700;
+    border-color: #E8A700;
+
+    &:hover {
+      background-color: #E8A700;
+      color: white;
+    }
+  }
+
   .thumbs-vertical {
     display: flex;
     flex-direction: column;
@@ -20,39 +54,71 @@
   }
 
   .main-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f8f8;
+    min-height: 600px;
+    max-height: 600px;
+    overflow: hidden;
+  }
+
+  .main-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+
+  .main-image-container {
     position: relative;
     width: 100%;
     max-width: 100%;
     overflow: hidden;
-
-    .main-image {
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-      border-radius: 0.5rem;
-    }
-
-    .zoom-lens {
-      position: absolute;
-      pointer-events: none;
-      border: 2px solid #E8A700;
-      border-radius: 50%;
-      background-repeat: no-repeat;
-      background-position: center;
-      z-index: 10;
-    }
   }
 
-  .card-title {
-    color: var(--text-color); 
+
+  .zoom-viewer {
+    position: absolute;
+    left: 800px;
+    top: 150px;
+    width: 300px;
+    height: 300px;
+    background-repeat: no-repeat;
+    border: 1px solid #ccc;
+    z-index: 10;
   }
 
-  .card-text {
-    color: inherit; 
+
+
+}
+
+.card-title {
+  color: var(--text-color);
+}
+
+.card-text {
+  color: inherit;
+}
+
+.fw-bold {
+  color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+  .main-image-container {
+    min-height: 280px !important;
+    max-height: 280px !important;
   }
 
-  .fw-bold {
-    color: var(--text-color); 
+  .main-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
   }
 
+  .zoom-viewer {
+    display: none;
+  }
 }

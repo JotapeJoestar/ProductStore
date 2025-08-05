@@ -103,4 +103,7 @@ export class ProductService {
   getProductById(id: number): Product | undefined {
     return this.products.find(p => p.id === id);
   }
+  getRelatedProducts(currentId: number): Product[] {
+    return this.products.filter(p => p.id !== currentId).slice(0, 3);
+  }
 }

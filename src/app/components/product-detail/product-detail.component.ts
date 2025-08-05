@@ -15,7 +15,6 @@ import { RouterModule } from '@angular/router';
 export class ProductDetailComponent {
   product: Product | undefined;
   selectedImage: string | undefined;
-  zoomActive = false;
   zoomStyle: any = {};
 
   @ViewChild('mainImg', { static: false }) mainImgRef!: ElementRef<HTMLImageElement>;
@@ -23,7 +22,7 @@ export class ProductDetailComponent {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -41,30 +40,33 @@ export class ProductDetailComponent {
     window.open(url, '_blank');
   }
 
+  zoomActive = false;
+
+  @ViewChild('mainImg', { static: false }) mainImg!: ElementRef;
+
+  toggleZoom(): void {
+    this.zoomActive = !this.zoomActive;
+  }
+
   onZoom(event: MouseEvent): void {
-    if (!this.mainImgRef) return;
-    const img = this.mainImgRef.nativeElement;
-    const rect = img.getBoundingClientRect();
+    if (!this.zoomActive || !this.mainImg) return;
+
+    const rect = this.mainImg.nativeElement.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    const lensSize = 120;
-    const left = Math.max(0, Math.min(x - lensSize / 2, rect.width - lensSize));
-    const top = Math.max(0, Math.min(y - lensSize / 2, rect.height - lensSize));
+    const xPercent = (x / rect.width) * 100;
+    const yPercent = (y / rect.height) * 100;
 
     this.zoomStyle = {
-      left: `${left}px`,
-      top: `${top}px`,
-      width: `${lensSize}px`,
-      height: `${lensSize}px`,
-      backgroundImage: `url('${this.selectedImage}')`,
-      backgroundSize: `${rect.width * 2}px ${rect.height * 2}px`,
-      backgroundPosition: `-${left * 2}px -${top * 2}px`
+      'background-image': `url('${this.selectedImage || this.product?.images[0]}')`,
+      'background-position': `${xPercent}% ${yPercent}%`,
+      'background-size': '200%'
     };
-    this.zoomActive = true;
   }
 
   resetZoom(): void {
-    this.zoomActive = false;
+    this.zoomStyle = {};
   }
+
 }

@@ -1,39 +1,43 @@
 <div class="pt-5 container mt-4" *ngIf="product">
   <div class="card shadow">
-    <div class="row g-0">
-      <div class="col-md-5 d-flex">
+    <div class="row g-0 flex-column flex-md-row">
+
+      <!-- Columna izquierda: miniaturas + imagen principal -->
+      <div class="col-md-7 d-flex">
+        <!-- Miniaturas verticales -->
         <div class="thumbs-vertical me-3">
-          <img 
-            *ngFor="let img of product.images" 
-            [src]="img" 
-            class="thumb mb-2" 
-            [class.selected]="img === selectedImage"
-            (click)="selectedImage = img"
-            [alt]="product.name"
-          />
+          <img *ngFor="let img of product.images" [src]="img" class="thumb mb-2"
+            [class.selected]="img === selectedImage" (click)="selectedImage = img" [alt]="product.name" />
         </div>
-        <div class="main-image-container">
-          <img 
-            [src]="selectedImage || product.images[0]" 
-            class="main-image" 
-            [alt]="product.name"
-            (mousemove)="onZoom($event)"
-            (mouseleave)="resetZoom()"
-            #mainImg
-          />
-          <div class="zoom-lens" *ngIf="zoomActive" [ngStyle]="zoomStyle"></div>
+
+        <!-- Imagen principal y zoom fijo -->
+        <div class="position-relative">
+          <!-- Imagen principal -->
+          <div class="main-image-container" (click)="toggleZoom()" (mousemove)="onZoom($event)"
+            (mouseleave)="resetZoom()">
+            <img [src]="selectedImage || product.images[0]" class="main-image" [alt]="product.name" #mainImg />
+          </div>
+
+          <!-- Zoom fijo (usando clase existente) -->
+          <div *ngIf="zoomActive" class="zoom-viewer" [ngStyle]="zoomStyle">
+          </div>
         </div>
       </div>
-      <div class="col-md-7">
+
+      <!-- Columna derecha: información -->
+      <div class="col-md-5 d-flex flex-column justify-content-between">
         <div class="card-body">
           <h3 class="card-title">{{ product.name }}</h3>
           <p class="card-text">{{ product.description }}</p>
           <p class="fw-bold">$ {{ product.price | number:'1.0-0' }}</p>
-          <button class="btn btn-outline-yellow w-100" (click)="sendToWhatsApp()">Contactar por WhatsApp</button>
+        </div>
+        <div class="p-3">
+          <button class="btn btn-outline-yellow w-100" (click)="sendToWhatsApp()">
+            Contactar por WhatsApp
+          </button>
         </div>
       </div>
+
     </div>
   </div>
 </div>
-<div class="container mt-4" *ngIf="!product">
-  <p class="text-center">Cargando detalles del producto...</p>
