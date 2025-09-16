@@ -136,4 +136,17 @@ export class ProductService {
     return limit ? featured.slice(0, limit) : featured;
   }
 
+  updateProduct(updated: Product): boolean {
+    const idx = this.products.findIndex(p => p.id === updated.id);
+    if (idx === -1) return false;
+    this.products[idx] = { ...updated };
+    return true;
+  }
+
+  deleteProduct(id: number): boolean {
+    const prevLen = this.products.length;
+    this.products = this.products.filter(p => p.id !== id);
+    return this.products.length !== prevLen;
+  }
+
 }

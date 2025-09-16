@@ -135,6 +135,20 @@
     background-color: #6c757d; // gris
 }
 
+/* Dark mode: mejorar contraste de tarjetas en destacados */
+.dark-mode {
+    .featured-carousel .card .card-title,
+    .featured-carousel .card .card-text {
+        color: var(--text-color) !important;
+    }
+    .featured-carousel .card .btn-outline-yellow,
+    .featured-carousel .card .btn-outline-brand {
+        background: var(--btn-bg);
+        color: var(--btn-color);
+        border-color: var(--btn-bg);
+    }
+}
+
 /* Controles del carrusel de destacados con el mismo estilo del hero */
 .featured-carousel {
     .carousel-control-prev,

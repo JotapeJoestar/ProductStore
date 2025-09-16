@@ -18,3 +18,25 @@
     color: var(--text-color) !important;
   }
 }
+
+/* Admin top bar */
+.admin-topbar {
+  position: fixed;
+  top: 8px;
+  right: 12px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+}
+
+/* Dark mode fixes for navbar collapse and footer */
+.dark-mode {
+  .navbar .navbar-collapse {
+    background-color: var(--card-bg) !important;
+  }
+  footer.bg-light {
+    background-color: #1e1e1e !important;
+    color: var(--text-color) !important;
+    border-top-color: var(--border-color) !important;
+  }
+}

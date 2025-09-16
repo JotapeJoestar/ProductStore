@@ -114,6 +114,34 @@
   color: var(--text-color);
 }
 
+/* Tarjeta principal con borde degradado y mejor separación */
+.hero-card {
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background-image:
+    linear-gradient(var(--card-bg), var(--card-bg)),
+    linear-gradient(135deg, var(--btn-bg) 0%, #E8A700 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .hero-card .details-pane {
+    border-left: 1px solid var(--border-color);
+    padding-left: 1.5rem;
+  }
+}
+
+/* Dark mode: force contrast on action button */
+.dark-mode {
+  .card .btn-outline-brand {
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    border-color: var(--btn-bg);
+  }
+}
+
 @media (max-width: 768px) {
   .main-image-container {
     min-height: 280px !important;

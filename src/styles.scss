@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --bg-color: #0C2D5A;
     /* Fondo azul profundo */
     --text-color: #0F2B58;
@@ -178,6 +178,13 @@ $tiktok-black: #010101;
 }
 
 .navbar {
+    .container {
+        position: relative;
+        // Reduce el ancho mÃ¡ximo del navbar en pantallas grandes
+        @media (min-width: 1200px) {
+            max-width: 1140px; // similar a container-xl, mÃ¡s angosto que 1320px
+        }
+    }
     .navbar-collapse {
         background-color: white;
         padding: 1rem;
@@ -214,5 +221,39 @@ $tiktok-black: #010101;
         margin-left: auto;
         margin-right: 0.5rem;
         margin-top: 0;
+        z-index: 1060;
     }
 }
+
+.btn-outline-brand {
+    color: var(--btn-bg);
+    border: 1.5px solid var(--btn-bg);
+    background: transparent;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-outline-brand:hover,
+.btn-outline-brand:focus {
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    border-color: var(--btn-bg);
+}
+
+/* Ubica el toggler arriba a la derecha en móviles */
+@media (max-width: 992px) {
+    .navbar .navbar-toggler {
+        position: absolute;
+        right: 1rem;
+        top: 0.6rem;
+    }
+}
+
+/* Admin common */
+.admin-logo {
+    text-align: center;
+    margin: 1rem 0;
+}
+.admin-logo img { height: 80px; width: auto; }
+
+.btn-admin-grey { background-color: #6c757d; color: #fff; border: 1px solid #6c757d; }
+.btn-admin-grey:hover, .btn-admin-grey:focus { filter: brightness(0.95); color: #fff; }

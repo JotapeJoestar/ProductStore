@@ -1,11 +1,11 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+﻿<nav *ngIf="showLayout" class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
   <div class="container">
   <!-- Logo -->
   <a class="navbar-brand d-flex align-items-center" routerLink="/">
     <img src="assets/images/LOGO_EUROMOTORS.png" alt="Logo Euromotors">
   </a>
 
-  <!-- Botón hamburguesa cel -->
+  <!-- BotÃ³n hamburguesa cel -->
   <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -40,8 +40,15 @@
   <router-outlet></router-outlet>
 </main>
 
+<!-- Admin topbar (only in admin views and when authenticated) -->
+<div *ngIf="!showLayout && isAdminAuthed" class="admin-topbar">
+  <button class="btn btn-sm btn-admin-grey" (click)="logout()">Cerrar sesion</button>
+  <a class="btn btn-sm btn-admin-grey ms-2" routerLink="/admin/product-form">Nuevo producto</a>
+  <a class="btn btn-sm btn-admin-grey ms-2" routerLink="/admin/products">Listado</a>
+  <a class="btn btn-sm btn-admin-grey ms-2" href="/" target="_blank" rel="noopener noreferrer">Ir al sitio</a>
+</div>
 <!-- Botones sociales -->
-<div class="social-float">
+<div class="social-float" *ngIf="showLayout">
   <a [href]="whatsappHref" target="_blank"
     rel="noopener noreferrer" class="whatsapp">
     <i class="bi bi-whatsapp"></i>
@@ -58,17 +65,17 @@
   </a>
 </div>
 
-<footer class="bg-light border-top py-4 mt-5">
+<footer *ngIf="showLayout" class="bg-light border-top py-4 mt-5">
   <div class="container text-center">
     <h5 class="mb-3">Contáctanos</h5>
     <p class="mb-1">
       <strong>Correo:</strong> euromotorscomercializadora&#64;gmail.com
     </p>
     <p class="mb-1">
-      <strong>Teléfono:</strong> +57 313 2567020
+      <strong>Telefono:</strong> +57 313 2567020
     </p>
     <p class="mb-0">
-      <strong>Dirección:</strong> Bogotá Colombia Carrera 29 #67-61
+      <strong>Direccion:</strong> Bogota¡ Colombia Carrera 29 #67-61
     </p>
         <p class="mb-0">
       <strong>Horarios: </strong> L-V 8:30 am - 5:30pm 
@@ -77,3 +84,8 @@
     </p>
   </div>
 </footer>
+
+
+
+
+

@@ -1,0 +1,18 @@
+.login-card {
+  background: linear-gradient(180deg, rgba(15,43,88,0.95) 0%, rgba(12,45,90,0.95) 100%);
+  border: 2px solid var(--border-color);
+}
+
+.form-label { color: #fff; font-weight: 600; }
+
+.form-control {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.form-control:focus {
+  border-color: var(--btn-bg);
+  box-shadow: 0 0 5px rgba(15, 43, 88, 0.4);
+}
+

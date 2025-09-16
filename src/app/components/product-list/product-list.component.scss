@@ -1,0 +1,18 @@
+/* Dark mode readability for product list cards */
+.dark-mode {
+  .card .card-title,
+  .card .card-text {
+    color: var(--text-color) !important;
+  }
+  .card .btn-outline-yellow,
+  .card .btn-outline-brand {
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    border-color: var(--btn-bg);
+  }
+}
+
+/* Labels de filtros en blanco */
+.filters .form-label {
+  color: #ffffff !important;
+}

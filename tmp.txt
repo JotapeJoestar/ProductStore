@@ -1,10 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+﻿import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { RouterModule } from '@angular/router';
-import { APP_CONFIG } from '../../config/app.config';
 
 @Component({
   selector: 'app-product-detail',
@@ -17,7 +16,7 @@ export class ProductDetailComponent {
   product: Product | undefined;
   selectedImage: string | undefined;
   zoomStyle: any = {};
-  readonly whatsappNumber = APP_CONFIG.whatsappNumber;
+  whatsappNumber = '573132567020';
 
   @ViewChild('mainImg', { static: false }) mainImgRef!: ElementRef<HTMLImageElement>;
 
@@ -75,18 +74,9 @@ export class ProductDetailComponent {
     }
   }
 
-  // Enlace compatible con Web y móvil
-  getQuoteHref(): string {
-    const name = this.product?.name ?? '';
-    const msg = `Hola, deseo mas informacion sobre el producto "${name}"`;
-    const base = 'https://api.whatsapp.com/send';
-    const params = new URLSearchParams({ phone: this.whatsappNumber, text: msg });
-    return `${base}?${params.toString()}`;
-  }
-
   getQuoteUrl(): string {
     const name = this.product?.name ?? '';
-    const msg = `Hola, deseo más información sobre el producto "${name}"`;
+    const msg = `Hola, deseo mÃ¡s informaciÃ³n sobre el producto "${name}"`;
     return `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(msg)}`;
   }
 

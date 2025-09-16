@@ -1,0 +1,27 @@
+h3 {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+}
+
+/* Botón 'Nuevo producto' en gris dentro del header de este componente */
+.admin-header .btn.btn-outline-brand {
+  background-color: #6c757d;
+  color: #fff;
+  border-color: #6c757d;
+}
+
+.admin-header .btn.btn-outline-brand:hover,
+.admin-header .btn.btn-outline-brand:focus {
+  filter: brightness(0.95);
+}
+
+/* Labels de filtros en blanco */
+.filters .form-label {
+  color: #ffffff !important;
+}
