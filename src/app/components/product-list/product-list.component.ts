@@ -76,10 +76,10 @@ export class ProductListComponent {
         ? (product.name.toLowerCase().includes(term) || (product.description || '').toLowerCase().includes(term))
         : true;
       const matchesCategory = this.selectedCategory ? product.category === this.selectedCategory : true;
-      const matchesType = this.selectedType ? product.type === this.selectedType : true; // 👈 Filtro por tipo
+      const matchesType = this.selectedType ? product.type === this.selectedType : true; // Filtro por tipo
       const matchesPrice = this.maxPrice ? product.price <= this.maxPrice : true;
 
-      return matchesBrand && matchesSearch && matchesCategory && matchesType && matchesPrice;
+      return matchesBrand && matchesSearch && matchesType && matchesPrice;
     });
   }
 
@@ -98,3 +98,5 @@ export class ProductListComponent {
     return value;
   }
 }
+
+
