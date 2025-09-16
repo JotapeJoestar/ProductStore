@@ -15,16 +15,16 @@
   <div class="collapse navbar-collapse" id="navbarContent">
     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-center">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/">Inicio</a>
+        <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/products">Repuestos</a>
+        <a class="nav-link" routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Repuestos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/contact">Contacto</a>
+        <a class="nav-link" routerLink="/contact" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Contacto</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/about">Quienes Somos</a>
+        <a class="nav-link" routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Quienes Somos</a>
       </li>
       <li class="nav-item">
         <button class="btn btn-outline-dark w-100 mt-2 mt-lg-0" (click)="toggleDarkMode()" title="Cambiar tema">

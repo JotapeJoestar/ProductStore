@@ -11,4 +11,10 @@
     color: var(--text-color) !important; /* mantener contraste de texto */
     transform: none; /* sin escala para consistencia */
   }
+
+  /* Estado activo persistente segun ruta */
+  .nav-link.active {
+    background-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+  }
 }
