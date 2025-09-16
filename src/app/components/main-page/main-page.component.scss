@@ -1,0 +1,182 @@
+.hero-carousel {
+    max-width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+
+    .carousel-inner {
+        height: 100%;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    .carousel-item {
+        height: 100%;
+
+        img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgb(255, 255, 255);
+        border-radius: 50%;
+        padding: 0;
+        opacity: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+        z-index: 2;
+
+        &.carousel-control-prev {
+            left: 1rem;
+        }
+
+        &.carousel-control-next {
+            right: 1rem;
+        }
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background-color: #E8A700;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-size: 60% 60%;
+        filter: invert(1);
+    }
+
+
+    .full-width-carousel {
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        position: relative;
+    }
+
+    .carousel-item img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+    }
+
+    input.form-control,
+    select.form-select {
+        border-radius: 0.5rem;
+        box-shadow: none;
+        transition: box-shadow 0.2s;
+
+        &:focus {
+            box-shadow: 0 0 0 0.2rem #E8A700;
+            border-color: #E8A700;
+        }
+    }
+}
+
+// Botones de marcas
+.brand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    border: none;
+    color: white;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand-logo {
+        width: 44%;
+        height: 10%;
+        object-fit: contain;
+    }
+
+    .brand-mini-logo {
+        width: 100%;
+        height: 10%;
+        object-fit: contain;
+    }
+}
+
+.bmw {
+    background-color: #0066b1;
+}
+
+.mini {
+    background-color: #a7a3a3;
+}
+
+.mercedes {
+    background-color: #222222;
+}
+
+// Botón "Buscar todos"
+.all {
+    background-color: #6c757d; // gris
+}
+
+/* Controles del carrusel de destacados con el mismo estilo del hero */
+.featured-carousel {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgb(255, 255, 255);
+        border-radius: 50%;
+        padding: 0;
+        opacity: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+        z-index: 2;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background-color: #E8A700;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-size: 60% 60%;
+        filter: invert(1);
+    }
+}
+
+/* Línea decorativa bajo títulos de sección */
+.section-title {
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 4px;
+    background-color: #E8A700; /* acento corporativo */
+    border-radius: 2px;
+    margin: 10px auto 0; /* centrado */
+}

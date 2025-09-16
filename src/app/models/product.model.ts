@@ -3,7 +3,9 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category: string;
+  category: string;  
+  type: string;    
   image: string;
   images: string[];
+  featured?: boolean;
 }

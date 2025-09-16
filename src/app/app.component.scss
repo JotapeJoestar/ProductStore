@@ -1,0 +1,14 @@
+/* Hover gris corporativo para opciones del navbar */
+.navbar {
+  .nav-link {
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus {
+    background-color: var(--border-color) !important; /* gris corporativo */
+    color: var(--text-color) !important; /* mantener contraste de texto */
+    transform: none; /* sin escala para consistencia */
+  }
+}

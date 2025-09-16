@@ -1,0 +1,38 @@
+<div class="container my-4">
+  <div class="contact-card row g-4 p-4 shadow">
+    <div class="col-12 col-md-6">
+      <h3 class="mb-3 text-white">Contáctanos</h3>
+      <p class="mb-3 text-light">
+        Encuentra aquí todos los detalles para comunicarte con nosotros. Estamos a tu disposición para resolver tus dudas,
+        ofrecer asesoría personalizada y asegurarnos de que recibas el mejor servicio posible.
+      </p>
+
+      <ul class="list-unstyled contact-list">
+        <li class="mb-2"><i class="bi bi-envelope-fill me-2"></i> euromotorscomercializadora&#64;gmail.com</li>
+        <li class="mb-2"><i class="bi bi-telephone-forward-fill me-2"></i> +57 313 2567020</li>
+        <li class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> Bogotá, Colombia — Carrera 29 #67-61</li>
+        <li class="mb-2"><i class="bi bi-clock-fill me-2"></i> Horarios: L–V 8:30 am – 5:30 pm • S 8:30 am – 01:00 pm</li>
+      </ul>
+
+      <p class="text-light small mb-0">Completa el formulario y te responderemos a la brevedad.</p>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <form (ngSubmit)="submit()" #f="ngForm" class="contact-form">
+        <input class="form-control mb-3" name="name" [(ngModel)]="name" placeholder="Nombre" required />
+        <input class="form-control mb-3" name="phone" [(ngModel)]="phone" placeholder="Teléfono" />
+        <input class="form-control mb-3" name="email" [(ngModel)]="email" placeholder="Correo electrónico" type="email" />
+        <textarea class="form-control mb-3" name="message" [(ngModel)]="message" rows="5" placeholder="Mensaje"></textarea>
+        <button type="submit" class="btn btn-primary" [disabled]="submitting || !f.form.valid">
+          {{ submitting ? 'Enviando…' : '¡Enviar Ahora!' }}
+        </button>
+        <span *ngIf="submitted" class="ms-3 text-success">¡Gracias! Te contactaremos pronto.</span>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container mb-5">
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1578.1217451495422!2d-74.07539375361368!3d4.662087324764057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9a5484e943ed%3A0x9de346513949b33a!2zQ3JhLiAyOSAjIDY3LTYxLCBCYXJyaW9zIFVuaWRvcywgQm9nb3TDoSwgRC5DLiwgQm9nb3TDoSwgQm9nb3TDoSwgRC5DLg!5e0!3m2!1ses!2sco!4v1757984603022!5m2!1ses!2sco" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+

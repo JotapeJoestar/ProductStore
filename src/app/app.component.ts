@@ -11,6 +11,12 @@ import { NgClass } from '@angular/common';
 })
 export class AppComponent {
   isDarkMode = false;
+  whatsappNumber = '573132567020';
+  whatsappDefault = 'Hola, me gustaría conocer el catálogo';
+
+  get whatsappHref(): string {
+    return `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(this.whatsappDefault)}`;
+  }
 
   toggleDarkMode(): void {
     this.isDarkMode = !this.isDarkMode;

@@ -1,48 +1,52 @@
 :root {
-    --bg-color: #ffffff;
-    --text-color: #E8A700;
+    --bg-color: #0C2D5A;
+    /* Fondo azul profundo */
+    --text-color: #0F2B58;
+    /* Texto en blanco sobre azul */
     --card-bg: #f8f9fa;
-    --btn-bg: #E8A700;
+    /* Fondo de cards claro */
+    --btn-bg: #0F2B58;
+    /* Botones en azul corporativo */
     --btn-color: #ffffff;
+    /* Texto de botones en blanco */
+    --border-color: #CDCDCD;
+    /* Bordes gris claro */
 }
 
 .dark-mode {
     --bg-color: #121212;
-    --text-color: #E8A700;
+    /* Fondo oscuro */
+    --text-color: #CDCDCD;
+    /* Texto gris claro */
     --card-bg: #1e1e1e;
-    --btn-bg: #E8A700;
+    /* Cards en gris oscuro */
+    --btn-bg: #0F2B58;
+    /* Botones azul corporativo */
     --btn-color: #ffffff;
+    /* Texto blanco */
+    --border-color: #2E2E2E;
+    /* Bordes oscuros */
 }
 
 body {
     background-color: var(--bg-color);
-    color: #212529;
+    color: var(--text-color);
+    padding-top: var(--navbar-height);
 }
 
 .dark-mode body {
-  color: white;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.dark-mode body {
+    color: var(--text-color);
 }
 
 .card {
     background-color: var(--card-bg);
     color: var(--text-color);
-}
-
-.btn-primary {
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
-}
-
-body,
-.card,
-.btn {
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.card {
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 2px solid #c0c0c0;
+    border: 2px solid var(--border-color);
 
     .card-img-top {
         height: 200px;
@@ -58,7 +62,6 @@ body,
         border: 1.5px solid var(--btn-bg);
         background: transparent;
         transition: background 0.2s, color 0.2s, border-color 0.2s;
-        border-color: #E8A700;
     }
 
     .btn-outline-yellow:hover,
@@ -67,5 +70,149 @@ body,
         color: var(--btn-color);
         border-color: var(--btn-bg);
     }
-    
+}
+
+.btn-primary {
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+}
+
+body,
+.card,
+.btn {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+$whatsapp-green: #25d366;
+$instagram-pink: #E1306C;
+$facebook-blue: #1877f2;
+$tiktok-black: #010101;
+
+.social-float {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 999;
+
+    a {
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.15);
+            text-decoration: none;
+            color: white;
+        }
+
+        i {
+            color: inherit;
+        }
+    }
+
+    .whatsapp {
+        width: 60px;
+        height: 60px;
+        font-size: 32px;
+        background-color: $whatsapp-green;
+        color: white;
+    }
+
+    .social.small {
+        width: 35px;
+        height: 35px;
+        font-size: 22px;
+        margin-left: 20px;
+        color: white;
+    }
+
+    [aria-label="Instagram"] {
+        background: linear-gradient(45deg, #feda75, #d62976, #962fbf, #4f5bd5);
+    }
+
+    [aria-label="Facebook"] {
+        background-color: $facebook-blue;
+    }
+
+    [aria-label="TikTok"] {
+        background-color: $tiktok-black;
+    }
+}
+
+.navbar {
+    height: 100px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+
+        img {
+            height: 80px;
+            width: auto;
+            margin-right: 12px;
+        }
+    }
+}
+
+.navbar .btn {
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+}
+
+:root {
+    --navbar-height: 150px;
+}
+
+@media (max-width: 576px) {
+    body {
+        padding-top: 80px;
+    }
+}
+
+.navbar {
+    .navbar-collapse {
+        background-color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-link {
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-color) !important;
+        transition: color 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+            color: var(--btn-bg) !important;
+            transform: scale(1.05);
+        }
+    }
+
+    .nav-item {
+        margin: 0 0.5rem;
+    }
+
+    .btn-outline-dark {
+        border-radius: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .navbar-toggler {
+        margin-left: auto;
+        margin-right: 0.5rem;
+        margin-top: 0;
+    }
 }

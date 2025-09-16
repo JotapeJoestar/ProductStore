@@ -16,6 +16,7 @@ export class ProductDetailComponent {
   product: Product | undefined;
   selectedImage: string | undefined;
   zoomStyle: any = {};
+  whatsappNumber = '573132567020';
 
   @ViewChild('mainImg', { static: false }) mainImgRef!: ElementRef<HTMLImageElement>;
 
@@ -25,21 +26,10 @@ export class ProductDetailComponent {
   ) { }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.product = this.productService.getProductById(id);
-    if (this.product && this.product.images && this.product.images.length > 0) {
-      this.selectedImage = this.product.images[0];
-    }
+    this.route.paramMap.subscribe(() => {
+      this.loadProduct();
+    });
   }
-
-  sendToWhatsApp(): void {
-    if (!this.product) return;
-    const message = `Hola, estoy interesado en el producto: ${this.product.name} que cuesta $${this.product.price}`;
-    const phone = '573243667373';
-    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  }
-
   zoomActive = false;
 
   @ViewChild('mainImg', { static: false }) mainImg!: ElementRef;
@@ -68,5 +58,27 @@ export class ProductDetailComponent {
   resetZoom(): void {
     this.zoomStyle = {};
   }
+
+  relatedProducts: Product[] = [];
+
+  loadProduct(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const product = this.productService.getProductById(id);
+
+    if (product) {
+      this.product = product;
+      this.selectedImage = product.image;
+      this.relatedProducts = this.productService.getRelatedProducts(product.id);
+    } else {
+      console.error('Producto no encontrado');
+    }
+  }
+
+  getQuoteUrl(): string {
+    const name = this.product?.name ?? '';
+    const msg = `Hola, deseo más información sobre el producto "${name}"`;
+    return `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+  }
+
 
 }

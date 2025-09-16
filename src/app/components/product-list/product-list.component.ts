@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
 
@@ -28,27 +28,73 @@ export class ProductListComponent {
 
   searchTerm = '';
   selectedCategory = '';
+  selectedType = '';   
   maxPrice?: number;
 
   categories: string[] = [];
+  types: string[] = []; 
 
-  constructor(private productService: ProductService) { }
+  brand: string | null = null;
+
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.products = this.productService.getProducts();
+    this.products = this.productService.getProducts().map(p => ({
+      ...p,
+      type: this.normalizeType(p.type)
+    }));
+
     this.categories = [...new Set(this.products.map(p => p.category))];
-    this.filterProducts();
+    // Tipos de repuesto predefinidos
+    this.types = [
+      'Motores y componentes',
+      'Transmision y cajas de cambio',
+      'Sistemas de frenado',
+      'Sistemas de arranque',
+      'Sistemas electronicos',
+      'Aire acondicionado y climatizacion',
+      'Frenos y pastillas',
+      'Alternadores y generadores'
+    ];
+
+    this.route.paramMap.subscribe(params => {
+      const paramBrand = params.get('brand');
+      this.brand = paramBrand;
+      this.selectedCategory = paramBrand ? paramBrand : '';
+      this.filterProducts();
+    });
   }
 
   filterProducts(): void {
     this.filteredProducts = this.products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesBrand = this.selectedCategory ? product.category.toLowerCase() === this.selectedCategory.toLowerCase() : true;
+      const term = this.searchTerm.trim().toLowerCase();
+      const matchesSearch = term
+        ? (product.name.toLowerCase().includes(term) || (product.description || '').toLowerCase().includes(term))
+        : true;
       const matchesCategory = this.selectedCategory ? product.category === this.selectedCategory : true;
+      const matchesType = this.selectedType ? product.type === this.selectedType : true; // 👈 Filtro por tipo
       const matchesPrice = this.maxPrice ? product.price <= this.maxPrice : true;
-      return matchesSearch && matchesCategory && matchesPrice;
+
+      return matchesBrand && matchesSearch && matchesCategory && matchesType && matchesPrice;
     });
   }
 
-  viewDetails(productId: number): void { }
+  viewDetails(productId: number): void {
+  }
 
+  private normalizeType(value: string): string {
+    const v = (value || '').toLowerCase();
+    if (v.includes('motor')) return 'Motores y componentes';
+    if (v.includes('freno')) return 'Frenos y pastillas';
+    if (v.includes('susp')) return 'Transmision y cajas de cambio';
+    if (v.includes('electr') || v.includes('eléctr')) return 'Sistemas electronicos';
+    if (v.includes('carrocer')) return 'Aire acondicionado y climatizacion';
+    if (v.includes('arranque')) return 'Sistemas de arranque';
+    if (v.includes('aire') || v.includes('clima')) return 'Aire acondicionado y climatizacion';
+    return value;
+  }
 }

@@ -1,12 +1,79 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 fixed-top">
-  <a class="navbar-brand" routerLink="/">Tienda</a>
-  <div class="ms-auto">
-    <button class="btn btn-outline-light" (click)="toggleDarkMode()" title="Cambiar tema">
-      <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
-    </button>
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+  <div class="container">
+  <!-- Logo -->
+  <a class="navbar-brand d-flex align-items-center" routerLink="/">
+    <img src="assets/images/LOGO_EUROMOTORS.png" alt="Logo Euromotors">
+  </a>
+
+  <!-- Botón hamburguesa cel -->
+  <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Contenido -->
+  <div class="collapse navbar-collapse" id="navbarContent">
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-center">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/">Inicio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/products">Repuestos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/contact">Contacto</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/about">Quienes Somos</a>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-outline-dark w-100 mt-2 mt-lg-0" (click)="toggleDarkMode()" title="Cambiar tema">
+          <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
   </div>
 </nav>
 
-<main class="w-100 mt-5 my-4">
+<main class="w-100 my-4">
   <router-outlet></router-outlet>
 </main>
+
+<!-- Botones sociales -->
+<div class="social-float">
+  <a [href]="whatsappHref" target="_blank"
+    rel="noopener noreferrer" class="whatsapp">
+    <i class="bi bi-whatsapp"></i>
+  </a>
+  <a href="https://www.instagram.com/euromotorsoficial" target="_blank" aria-label="Instagram" class="social small">
+    <i class="bi bi-instagram"></i>
+  </a>
+  <a href="https://web.facebook.com/profile.php?id=61580191621392" target="_blank" aria-label="Facebook"
+    class="social small">
+    <i class="bi bi-facebook"></i>
+  </a>
+  <a href="https://www.tiktok.com/@euromotorsoficial" target="_blank" aria-label="TikTok" class="social small">
+    <i class="bi bi-tiktok"></i>
+  </a>
+</div>
+
+<footer class="bg-light border-top py-4 mt-5">
+  <div class="container text-center">
+    <h5 class="mb-3">Contáctanos</h5>
+    <p class="mb-1">
+      <strong>Correo:</strong> euromotorscomercializadora&#64;gmail.com
+    </p>
+    <p class="mb-1">
+      <strong>Teléfono:</strong> +57 313 2567020
+    </p>
+    <p class="mb-0">
+      <strong>Dirección:</strong> Bogotá Colombia Carrera 29 #67-61
+    </p>
+        <p class="mb-0">
+      <strong>Horarios: </strong> L-V 8:30 am - 5:30pm 
+      <br>
+      S 8:30 am - 01:00 pm
+    </p>
+  </div>
+</footer>

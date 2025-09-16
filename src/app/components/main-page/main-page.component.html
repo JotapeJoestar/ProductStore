@@ -1,0 +1,109 @@
+<!-- Botones de marcas -->
+<div class="container my-4">
+  <div class="row g-4 justify-content-center text-center">
+    <div class="col-12 col-md-4">
+      <button class="btn brand-btn bmw w-100" (click)="goToBrand('BMW')">
+        <img src="assets/images/bmw-logo.svg" alt="BMW" class="brand-logo">
+      </button>
+    </div>
+    <div class="col-12 col-md-4">
+      <button class="btn brand-btn mini w-100" (click)="goToBrand('MINI')">
+        <img src="assets/images/mini-logo.svg" alt="Mini Cooper" class="brand-mini-logo">
+      </button>
+    </div>
+    <div class="col-12 col-md-4">
+      <button class="btn brand-btn mercedes w-100" (click)="goToBrand('MERCEDES')">
+        <img src="assets/images/Mercedes-Logo.svg" alt="Mercedes-Benz" class="brand-logo">
+      </button>
+    </div>
+    <div class="col-12 col-md-4">
+      <button class="btn brand-btn all w-100" (click)="goToAll()">BUSCAR TODOS</button>
+    </div>
+  </div>
+  
+</div>
+
+<div class="w-100 my-4">
+  <div id="productCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner rounded shadow">
+      <div class="carousel-item active">
+        <img src="assets/images/carro-1.jpg" class="d-block w-100" alt="Producto 1">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/images/carro-2.jpg" class="d-block w-100" alt="Producto 2">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/images/carro-3.jpg" class="d-block w-100" alt="Producto 3">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/images/carro-4.jpg" class="d-block w-100" alt="Producto 4">
+      </div>
+      <div class="carousel-item">
+        <img src="assets/images/carro-5.jpg" class="d-block w-100" alt="Producto 5">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</div>
+
+<div class="container my-5" *ngIf="featured.length">
+  <h3 class="mb-3 text-uppercase text-center text-white section-title">PRODUCTOS DESTACADOS</h3>
+  <div id="featuredCarousel" class="carousel slide featured-carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item" *ngFor="let _ of featured; let i = index" [class.active]="i === 0">
+        <div class="row g-3">
+          <div class="col-12 col-md-4" *ngFor="let offset of [0,1,2]">
+            <ng-container *ngIf="featured[(i + offset) % featured.length] as p">
+              <div class="card h-100 shadow-sm" role="button" (click)="openProduct(p.id)">
+                <img [src]="p.image" class="card-img-top" [alt]="p.name">
+                <div class="card-body">
+                  <h5 class="card-title mb-1">{{ p.name }}</h5>
+                  <p class="card-text small text-muted mb-2">{{ p.category }} • {{ p.type }}</p>
+                  <p class="card-text text-truncate">{{ p.description }}</p>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="fw-bold">${{ p.price | number:'1.0-0' }}</span>
+                    <button class="btn btn-outline-yellow" (click)="$event.stopPropagation(); openProduct(p.id)">Ver detalle</button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</div>
+
+<!-- Botones flotantes sociales -->
+<!-- <div class="social-float">
+<a href="https://wa.me/573243667373?text=Hola%2C%20me%20gustar%C3%ADa%20conocer%20el%20cat%C3%A1logo"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="whatsapp">
+  <i class="bi bi-whatsapp"></i>
+</a>
+
+  <a href="https://www.instagram.com/euromotorsoficial?igsh=MmZ5MjBuajFrb3Jl" target="_blank" aria-label="Instagram"
+    class="social small">
+    <i class="bi bi-instagram"></i>
+  </a>
+  <a href="https://web.facebook.com/profile.php?id=61580191621392" target="_blank" aria-label="Facebook"
+    class="social small">
+    <i class="bi bi-facebook"></i>
+  </a>
+  <a href="https://www.tiktok.com/@euromotorsoficial?is_from_webapp=1&sender_device=pc" target="_blank"
+    aria-label="TikTok" class="social small">
+    <i class="bi bi-tiktok"></i>
+  </a>
+</div> -->
