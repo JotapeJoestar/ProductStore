@@ -14,7 +14,7 @@ import { ProductService } from '../../services/product.service';
 })
 export class MainPageComponent {
   phoneNumber: string = '573132567020';
-  defaultMessage: string = 'Hola, me gustaría conocer el catálogo';
+  defaultMessage: string = 'Hola, me gustaria conocer el catalogo';
   whatsappLink!: SafeUrl;
   featured: Product[] = [];
 
@@ -28,7 +28,10 @@ export class MainPageComponent {
     const url = `https://wa.me/${this.phoneNumber}?text=${encodeURIComponent(this.defaultMessage)}`;
     this.whatsappLink = this.sanitizer.bypassSecurityTrustUrl(url);
 
-    this.featured = this.productService.getFeaturedProducts();
+    this.productService.getProductsFromBackend().then(list => {
+      const featured = (list as any[]).filter(p => (p as any).featured);
+      this.featured = featured.length ? (featured as Product[]) : list.slice(0, 6);
+    });
   }
 
   goToBrand(brand: string) {

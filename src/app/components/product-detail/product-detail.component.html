@@ -1,4 +1,5 @@
-<div class="pt-5 container mt-4" *ngIf="product">
+﻿<div class="container mt-4" *ngIf="product">
+  <h3 class="text-white text-uppercase mb-3">DETALLES DEL PRODUCTO</h3>
   <div class="card shadow hero-card p-3 p-md-4">
 
     <div class="row g-0 flex-column flex-md-row">
@@ -7,7 +8,7 @@
       <div class="col-md-7 d-flex">
         <!-- Miniaturas verticales -->
         <div class="thumbs-vertical me-3">
-          <img *ngFor="let img of product.images" [src]="img" class="thumb mb-2"
+          <img *ngFor="let img of imagesDisplay" [src]="img" class="thumb mb-2"
             [class.selected]="img === selectedImage" (click)="selectedImage = img" [alt]="product.name" />
         </div>
 
@@ -16,7 +17,7 @@
           <!-- Imagen principal -->
           <div class="main-image-container" (click)="toggleZoom()" (mousemove)="onZoom($event)"
             (mouseleave)="resetZoom()">
-            <img [src]="selectedImage || product.images[0]" class="main-image" [alt]="product.name" #mainImg />
+            <img [src]="selectedImage || (imagesDisplay && imagesDisplay[0]) || ''" class="main-image" [alt]="product.name" #mainImg />
           </div>
 
           <!-- Zoom fijo -->
@@ -29,14 +30,16 @@
         <h2 class="product-title">{{ product.name }}</h2>
         <p class="product">{{ product.description }}</p>
         <a class="btn btn-outline-brand mt-auto" [href]="getQuoteHref()" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
+        <div class="mt-3" *ngIf="product?.price !== undefined && product?.price !== null">
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Productos relacionados -->
-<div class="container mt-5">
-  <h4 class="mb-3">Tambieén te puede interesar</h4>
+<div class="container mt-5" *ngIf="relatedProducts && relatedProducts.length">
+  <h4 class="mb-3 text-center text-white section-title">También te puede interesar</h4>
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
     <div class="col" *ngFor="let related of relatedProducts">
       <div class="card h-100 shadow-sm">
@@ -53,4 +56,5 @@
     </div>
   </div>
 </div>
+
 

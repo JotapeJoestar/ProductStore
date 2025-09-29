@@ -1,9 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
-import { RouterModule } from '@angular/router';
 import { APP_CONFIG } from '../../config/app.config';
 
 @Component({
@@ -14,43 +15,69 @@ import { APP_CONFIG } from '../../config/app.config';
   styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent {
-  product: Product | undefined;
-  selectedImage: string | undefined;
-  zoomStyle: any = {};
+  product?: Product;
+  imagesDisplay: string[] = [];
+  selectedImage = '';
+  relatedProducts: Product[] = [];
+  zoomActive = false;
+  zoomStyle: Record<string, string> = {};
   readonly whatsappNumber = APP_CONFIG.whatsappNumber;
 
-  @ViewChild('mainImg', { static: false }) mainImgRef!: ElementRef<HTMLImageElement>;
+  @ViewChild('mainImg', { static: false }) mainImg?: ElementRef<HTMLImageElement>;
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(() => {
-      this.loadProduct();
+      void this.loadProduct();
     });
   }
-  zoomActive = false;
 
-  @ViewChild('mainImg', { static: false }) mainImg!: ElementRef;
+  private async loadProduct(): Promise<void> {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (!id) {
+      return;
+    }
+
+    const product = await this.productService.getProductByIdAsync(id);
+    if (!product) {
+      console.error('Producto no encontrado');
+      return;
+    }
+
+    this.product = product;
+    this.imagesDisplay = this.buildImagesDisplay(product);
+    this.selectedImage = this.imagesDisplay[0] || product.image || '';
+
+    const relatedFromCache = this.productService.getRelatedProducts(product.id);
+    if (relatedFromCache.length) {
+      this.relatedProducts = relatedFromCache;
+    } else {
+      const list = await this.productService.getProductsFromBackend();
+      this.relatedProducts = list
+        .filter(p => p.id !== product.id && this.normalize(p.category) === this.normalize(product.category))
+        .slice(0, 3);
+    }
+  }
 
   toggleZoom(): void {
     this.zoomActive = !this.zoomActive;
   }
 
   onZoom(event: MouseEvent): void {
-    if (!this.zoomActive || !this.mainImg) return;
+    if (!this.zoomActive || !this.mainImg) {
+      return;
+    }
 
     const rect = this.mainImg.nativeElement.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const xPercent = (x / rect.width) * 100;
-    const yPercent = (y / rect.height) * 100;
+    const xPercent = ((event.clientX - rect.left) / rect.width) * 100;
+    const yPercent = ((event.clientY - rect.top) / rect.height) * 100;
 
     this.zoomStyle = {
-      'background-image': `url('${this.selectedImage || this.product?.images[0]}')`,
+      'background-image': `url('${this.selectedImage || this.imagesDisplay[0] || ''}')`,
       'background-position': `${xPercent}% ${yPercent}%`,
       'background-size': '200%'
     };
@@ -60,22 +87,6 @@ export class ProductDetailComponent {
     this.zoomStyle = {};
   }
 
-  relatedProducts: Product[] = [];
-
-  loadProduct(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    const product = this.productService.getProductById(id);
-
-    if (product) {
-      this.product = product;
-      this.selectedImage = product.image;
-      this.relatedProducts = this.productService.getRelatedProducts(product.id);
-    } else {
-      console.error('Producto no encontrado');
-    }
-  }
-
-  // Enlace compatible con Web y mÃ³vil
   getQuoteHref(): string {
     const name = this.product?.name ?? '';
     const msg = `Hola, deseo mas informacion sobre el producto "${name}"`;
@@ -86,10 +97,27 @@ export class ProductDetailComponent {
 
   getQuoteUrl(): string {
     const name = this.product?.name ?? '';
-    const msg = `Hola, deseo mÃ¡s informaciÃ³n sobre el producto "${name}"`;
+    const msg = `Hola, deseo más información sobre el producto "${name}"`;
     return `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(msg)}`;
   }
 
+  private buildImagesDisplay(product: Product): string[] {
+    const images: string[] = [];
+    const main = product.image ? product.image : '';
+    if (main) {
+      images.push(main);
+    }
+    if (Array.isArray(product.images)) {
+      product.images.forEach(img => {
+        if (img && !images.includes(img)) {
+          images.push(img);
+        }
+      });
+    }
+    return images;
+  }
 
+  private normalize(value: string | null | undefined): string {
+    return (value ?? '').trim().toLowerCase();
+  }
 }
-

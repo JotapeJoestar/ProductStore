@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,8 +22,13 @@ export class ProductFormComponent {
     category: '',
     type: '',
     image: '',
-    images: []
+    images: [],
+    featured: false
   };
+
+  private imageFiles: (File | null)[] = [];
+  formSubmitted = false;
+  isSaving = false;
 
   brandOptions = ['BMW', 'MERCEDES', 'MINI'];
   typeOptions = [
@@ -39,47 +44,94 @@ export class ProductFormComponent {
 
   constructor(private productService: ProductService, private router: Router) {}
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      this.product.id = Date.now();
-      this.productService.addProduct(this.product);
-      alert('Producto agregado con éxito');
-      this.router.navigate(['/products']);
+  async onSubmit(form: NgForm) {
+    this.formSubmitted = true;
+    if (!form.valid || this.isSaving) {
+      return;
+    }
+
+    const mainImageFile = this.imageFiles[0];
+    if (!mainImageFile) {
+      alert('Selecciona una imagen principal.');
+      return;
+    }
+
+    this.isSaving = true;
+    const additionalImageFiles = this.imageFiles.slice(1).filter((file): file is File => !!file);
+    const payload: Product = {
+      ...this.product,
+      image: '',
+      images: []
+    };
+
+    try {
+      const created = await this.productService.addProductAsync(payload, {
+        mainImageFile,
+        additionalImageFiles
+      });
+      if (created && created.id) {
+        alert('Producto agregado con exito');
+        this.router.navigate(['/admin/products']);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('No fue posible guardar el producto. Intenta de nuevo.');
+    } finally {
+      this.isSaving = false;
     }
   }
 
   async onMainImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
     if (!file.type.startsWith('image/')) {
       alert('El archivo seleccionado no es una imagen.');
       input.value = '';
       return;
     }
+
     const dataUrl = await this.readAsDataURL(file);
-    this.product.image = dataUrl;
-    // Mantener la imagen principal como primera del arreglo "images"
-    if (!this.product.images) this.product.images = [];
-    // Elimina duplicados de la misma imagen
-    this.product.images = this.product.images.filter(img => img !== dataUrl);
+    if (!this.product.images) {
+      this.product.images = [];
+    }
+
+    const existingIndex = this.product.images.findIndex(img => img === dataUrl);
+    if (existingIndex !== -1) {
+      this.product.images.splice(existingIndex, 1);
+      this.imageFiles.splice(existingIndex, 1);
+    }
+
     this.product.images.unshift(dataUrl);
-    // Limpia el input para permitir re-seleccionar el mismo archivo si se desea
+    this.imageFiles.unshift(file);
+    this.product.image = dataUrl;
     input.value = '';
   }
 
   async onAdditionalImagesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const files = Array.from(input.files ?? []);
-    const validImages = files.filter(f => f.type.startsWith('image/'));
-    if (!this.product.images) this.product.images = [];
-    for (const f of validImages) {
-      const url = await this.readAsDataURL(f);
-      if (!this.product.images.includes(url)) {
-        this.product.images.push(url);
-      }
+    if (!files.length) {
+      return;
     }
-    // Si no hay principal aún, usar la primera
+    if (!this.product.images) {
+      this.product.images = [];
+    }
+
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        continue;
+      }
+      const url = await this.readAsDataURL(file);
+      if (this.product.images.includes(url)) {
+        continue;
+      }
+      this.product.images.push(url);
+      this.imageFiles.push(file);
+    }
+
     if (!this.product.image && this.product.images.length) {
       this.product.image = this.product.images[0];
     }
@@ -96,32 +148,50 @@ export class ProductFormComponent {
   }
 
   removeImage(index: number) {
-    if (!this.product.images) return;
-    const removed = this.product.images.splice(index, 1)[0];
-    if (removed && removed === this.product.image) {
-      // Si eliminan la principal, tomar la siguiente disponible o limpiar
+    if (!this.product.images || index < 0 || index >= this.product.images.length) {
+      return;
+    }
+    this.product.images.splice(index, 1);
+    this.imageFiles.splice(index, 1);
+    if (index === 0) {
       this.product.image = this.product.images[0] ?? '';
     }
   }
 
   moveImageLeft(index: number) {
-    if (!this.product.images || index <= 0) return;
+    if (!this.product.images || index <= 0 || index >= this.product.images.length) {
+      return;
+    }
     const imgs = this.product.images;
+    const files = this.imageFiles;
     [imgs[index - 1], imgs[index]] = [imgs[index], imgs[index - 1]];
+    [files[index - 1], files[index]] = [files[index], files[index - 1]];
+    if (index === 0 || index === 1) {
+      this.product.image = imgs[0];
+    }
   }
 
   moveImageRight(index: number) {
-    if (!this.product.images || index >= this.product.images.length - 1) return;
+    if (!this.product.images || index < 0 || index >= this.product.images.length - 1) {
+      return;
+    }
     const imgs = this.product.images;
+    const files = this.imageFiles;
     [imgs[index + 1], imgs[index]] = [imgs[index], imgs[index + 1]];
+    [files[index + 1], files[index]] = [files[index], files[index + 1]];
+    if (index === 0 || index === 1) {
+      this.product.image = imgs[0];
+    }
   }
 
   setAsMain(index: number) {
-    if (!this.product.images || !this.product.images[index]) return;
-    const newMain = this.product.images[index];
-    this.product.image = newMain;
-    // Moverla al inicio del arreglo
-    this.product.images.splice(index, 1);
-    this.product.images.unshift(newMain);
+    if (!this.product.images || index < 0 || index >= this.product.images.length) {
+      return;
+    }
+    const [img] = this.product.images.splice(index, 1);
+    const [file] = this.imageFiles.splice(index, 1);
+    this.product.images.unshift(img);
+    this.imageFiles.unshift(file ?? null);
+    this.product.image = img;
   }
 }

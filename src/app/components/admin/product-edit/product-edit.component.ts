@@ -2,8 +2,16 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { Product } from '../../../models/product.model';
 import { ProductService } from '../../../services/product.service';
+import { APP_CONFIG } from '../../../config/app.config';
+
+interface ImageEntry {
+  preview: string;
+  file: File | null;
+  existingPath?: string;
+}
 
 @Component({
   selector: 'app-product-edit',
@@ -14,6 +22,9 @@ import { ProductService } from '../../../services/product.service';
 })
 export class ProductEditComponent {
   product!: Product;
+  imageEntries: ImageEntry[] = [];
+  formSubmitted = false;
+  isSaving = false;
 
   brandOptions = ['BMW', 'MERCEDES', 'MINI'];
   typeOptions = [
@@ -27,70 +38,231 @@ export class ProductEditComponent {
     'Alternadores y generadores'
   ];
 
-  constructor(private route: ActivatedRoute, private productService: ProductService, private router: Router) {}
+  private readonly backendOrigin = this.getBackendOrigin();
+
+  constructor(
+    private route: ActivatedRoute,
+    private productService: ProductService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    const p = this.productService.getProductById(id);
-    if (!p) {
+    this.loadProduct(id);
+  }
+
+  private async loadProduct(id: number) {
+    const fromCache = this.productService.getProductById(id);
+    if (fromCache) {
+      this.product = JSON.parse(JSON.stringify(fromCache));
+      if (typeof this.product.featured !== 'boolean') {
+        this.product.featured = false;
+      }
+      this.initializeImageEntries(fromCache);
+      return;
+    }
+
+    const fromBackend = await this.productService.getProductByIdAsync(id);
+    if (!fromBackend) {
       alert('Producto no encontrado');
       this.router.navigate(['/admin/products']);
       return;
     }
-    // Clonar para edición
-    this.product = JSON.parse(JSON.stringify(p));
+    this.product = JSON.parse(JSON.stringify(fromBackend));
+    if (typeof this.product.featured !== 'boolean') {
+      this.product.featured = false;
+    }
+    this.initializeImageEntries(fromBackend);
   }
 
-  onSubmit(form: NgForm) {
-    if (!form.valid) return;
-    const ok = this.productService.updateProduct(this.product);
-    if (!ok) {
-      alert('No se pudo actualizar el producto');
+  async onSubmit(form: NgForm) {
+    this.formSubmitted = true;
+    if (!form.valid || this.isSaving) {
       return;
     }
-    alert('Producto actualizado');
-    this.router.navigate(['/admin/products']);
+
+    if (!this.imageEntries.length) {
+      alert('El producto debe tener una imagen principal.');
+      return;
+    }
+
+    const mainEntry = this.imageEntries[0];
+    if (!mainEntry.file && !mainEntry.existingPath) {
+      alert('Selecciona una imagen principal.');
+      return;
+    }
+
+    this.isSaving = true;
+    try {
+      const { mainImageFile, additionalImageFiles } = this.prepareFiles();
+      const keepMainImage = mainImageFile ? null : (mainEntry.existingPath ?? null);
+      const keepImages = this.imageEntries
+        .slice(1)
+        .filter(entry => !entry.file && entry.existingPath)
+        .map(entry => entry.existingPath!)
+        .filter(Boolean);
+
+      await this.productService.updateProductAsync({
+        ...this.product,
+        image: this.imageEntries[0].preview,
+        images: this.imageEntries.map(entry => entry.preview)
+      }, {
+        mainImageFile,
+        additionalImageFiles,
+        keepMainImage,
+        keepImages
+      });
+
+      alert('Producto actualizado');
+      this.router.navigate(['/admin/products']);
+    } catch (error) {
+      console.error(error);
+      alert('No fue posible actualizar el producto. Intenta de nuevo.');
+    } finally {
+      this.isSaving = false;
+    }
   }
 
   async onMainImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) { alert('Archivo no válido'); input.value=''; return; }
-    const dataUrl = await this.readAsDataURL(file);
-    this.product.image = dataUrl;
-    if (!this.product.images) this.product.images = [];
-    this.product.images = this.product.images.filter(img => img !== dataUrl);
-    this.product.images.unshift(dataUrl);
+    const file = input.files?.[0] ?? null;
+    if (!file) {
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      alert('El archivo seleccionado no es una imagen.');
+      input.value = '';
+      return;
+    }
+
+    const preview = await this.readAsDataURL(file);
+    if (this.imageEntries.length) {
+      this.imageEntries[0] = { preview, file, existingPath: undefined };
+    } else {
+      this.imageEntries.push({ preview, file });
+    }
+    this.syncProductImages();
     input.value = '';
   }
 
   async onAdditionalImagesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const files = Array.from(input.files ?? []);
-    if (!this.product.images) this.product.images = [];
-    for (const f of files) {
-      if (!f.type.startsWith('image/')) continue;
-      const url = await this.readAsDataURL(f);
-      if (!this.product.images.includes(url)) this.product.images.push(url);
+    if (!files.length) {
+      return;
     }
-    if (!this.product.image && this.product.images.length) this.product.image = this.product.images[0];
+
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        continue;
+      }
+      const preview = await this.readAsDataURL(file);
+      if (this.imageEntries.some(entry => entry.preview === preview)) {
+        continue;
+      }
+      this.imageEntries.push({ preview, file });
+    }
+    this.syncProductImages();
     input.value = '';
   }
 
-  removeImage(i: number) {
-    if (!this.product.images) return;
-    const removed = this.product.images.splice(i,1)[0];
-    if (removed && removed === this.product.image) this.product.image = this.product.images[0] ?? '';
+  removeImage(index: number) {
+    if (index < 0 || index >= this.imageEntries.length) {
+      return;
+    }
+    this.imageEntries.splice(index, 1);
+    this.syncProductImages();
   }
-  moveImageLeft(i: number) {
-    if (!this.product.images || i<=0) return; const a=this.product.images; [a[i-1],a[i]]=[a[i],a[i-1]];
+
+  moveImageLeft(index: number) {
+    if (index <= 0 || index >= this.imageEntries.length) {
+      return;
+    }
+    const entries = this.imageEntries;
+    [entries[index - 1], entries[index]] = [entries[index], entries[index - 1]];
+    this.syncProductImages();
   }
-  moveImageRight(i: number) {
-    if (!this.product.images || i>=this.product.images.length-1) return; const a=this.product.images; [a[i+1],a[i]]=[a[i],a[i+1]];
+
+  moveImageRight(index: number) {
+    if (index < 0 || index >= this.imageEntries.length - 1) {
+      return;
+    }
+    const entries = this.imageEntries;
+    [entries[index], entries[index + 1]] = [entries[index + 1], entries[index]];
+    this.syncProductImages();
   }
-  setAsMain(i: number) {
-    if (!this.product.images) return; const m=this.product.images[i]; this.product.image=m; this.product.images.splice(i,1); this.product.images.unshift(m);
+
+  setAsMain(index: number) {
+    if (index <= 0 || index >= this.imageEntries.length) {
+      return;
+    }
+    const [entry] = this.imageEntries.splice(index, 1);
+    this.imageEntries.unshift(entry);
+    this.syncProductImages();
+  }
+
+  private initializeImageEntries(product: Product) {
+    const gallery = this.buildInitialGallery(product);
+    this.imageEntries = gallery.map(path => ({
+      preview: path,
+      file: null,
+      existingPath: this.stripBackendOrigin(path)
+    }));
+    this.syncProductImages();
+  }
+
+  private buildInitialGallery(product: Product): string[] {
+    const gallery: string[] = [];
+    if (product.image) {
+      gallery.push(product.image);
+    }
+    if (Array.isArray(product.images)) {
+      for (const img of product.images) {
+        if (img && !gallery.includes(img)) {
+          gallery.push(img);
+        }
+      }
+    }
+    return gallery;
+  }
+
+  private syncProductImages() {
+    if (!this.imageEntries.length) {
+      this.product.image = '';
+      this.product.images = [];
+      return;
+    }
+    this.product.image = this.imageEntries[0].preview;
+    this.product.images = this.imageEntries.map(entry => entry.preview);
+  }
+
+  private prepareFiles(): { mainImageFile: File | null; additionalImageFiles: File[] } {
+    const files: (File | null)[] = this.imageEntries.map(entry => entry.file ?? null);
+    const mainImageFile = files.length ? files[0] : null;
+    const additionalImageFiles = files.slice(1).filter((file): file is File => !!file);
+    return { mainImageFile, additionalImageFiles };
+  }
+
+  private stripBackendOrigin(path: string): string | undefined {
+    if (!path) {
+      return undefined;
+    }
+    if (this.backendOrigin && path.startsWith(this.backendOrigin)) {
+      return path.slice(this.backendOrigin.length);
+    }
+    return path;
+  }
+
+  private getBackendOrigin(): string | null {
+    const base = APP_CONFIG.backendBaseUrl;
+    if (!base) {
+      return null;
+    }
+    try {
+      return new URL(base).origin;
+    } catch {
+      return null;
+    }
   }
 
   private readAsDataURL(file: File): Promise<string> {
@@ -102,4 +274,3 @@ export class ProductEditComponent {
     });
   }
 }
-

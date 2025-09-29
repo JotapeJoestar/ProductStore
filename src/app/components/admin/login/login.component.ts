@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -16,21 +17,26 @@ export class AdminLoginComponent {
   password = '';
   error = '';
 
-  constructor(private router: Router, private location: Location) {}
+  constructor(private router: Router, private location: Location, private api: ApiService) {}
 
   onSubmit(f: NgForm) {
     this.error = '';
     if (!f.valid) return;
-    // Demo: credenciales fijas
-    const DEMO_USER = 'admin';
-    const DEMO_PASS = 'admin123';
-    const ok = (this.username === DEMO_USER && this.password === DEMO_PASS);
-    if (!ok) {
-      this.error = 'Credenciales inválidas';
-      return;
-    }
-    localStorage.setItem('admin_auth', 'true');
-    this.router.navigate(['/admin/products']);
+    const body = { username: this.username, password: this.password };
+    this.api.post<any>('login', body)
+      .then(res => {
+        const token = res?.token;
+        const exp = res?.expires_in;
+        if (!token) { throw new Error('Token no recibido'); }
+        try {
+          localStorage.setItem('auth_token', token);
+          if (exp) localStorage.setItem('auth_expires', String(Date.now() + (Number(exp) * 1000)));
+        } catch {}
+        this.router.navigate(['/admin/products']);
+      })
+      .catch(() => {
+        this.error = 'Credenciales invalidas';
+      });
   }
 
   goBack() { this.location.back(); }

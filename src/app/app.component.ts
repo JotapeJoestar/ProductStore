@@ -38,7 +38,13 @@ export class AppComponent {
     // Oculta navbar/footer solo en rutas que empiecen por /admin
     const isAdmin = /^\/admin(\/?|$)/.test(url);
     this.showLayout = !isAdmin;
-    this.isAdminAuthed = isAdmin && typeof localStorage !== 'undefined' && localStorage.getItem('admin_auth') === 'true' && url !== '/admin/login';
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('auth_token') : null;
+    const expStr = typeof localStorage !== 'undefined' ? localStorage.getItem('auth_expires') : null;
+    let valid = !!token;
+    if (valid && expStr) {
+      const now = Date.now(); const exp = Number(expStr); if (!isNaN(exp) && now > exp) valid = false;
+    }
+    this.isAdminAuthed = isAdmin && valid && url !== '/admin/login';
   }
 
   toggleDarkMode(): void {
@@ -47,7 +53,7 @@ export class AppComponent {
   }
 
   logout(): void {
-    try { localStorage.removeItem('admin_auth'); } catch {}
+    try { localStorage.removeItem('auth_token'); localStorage.removeItem('auth_expires'); } catch {}
     this.isAdminAuthed = false;
     this.router.navigate(['/admin/login']);
   }

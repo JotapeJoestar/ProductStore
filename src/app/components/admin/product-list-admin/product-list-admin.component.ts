@@ -39,8 +39,8 @@ export class ProductListAdminComponent {
     this.load();
   }
 
-  load() {
-    this.products = this.productService.getProducts();
+  async load() {
+    this.products = await this.productService.getProductsFromBackend();
     this.filterProducts();
   }
 
@@ -48,11 +48,11 @@ export class ProductListAdminComponent {
     this.router.navigate(['/admin/product-edit', product.id]);
   }
 
-  remove(product: Product) {
-    const ok = confirm(`¿Seguro que deseas eliminar "${product.name}"?`);
+  async onRemove(product: Product) {
+    const ok = window.confirm('Eliminar "' + product.name + '"?');
     if (!ok) return;
-    this.productService.deleteProduct(product.id);
-    this.load();
+    await this.productService.deleteProductAsync(product.id);
+    await this.load();
   }
 
   filterProducts(): void {
