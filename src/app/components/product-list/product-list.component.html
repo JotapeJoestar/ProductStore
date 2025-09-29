@@ -4,7 +4,7 @@
     <div class="col-md-4">
       <label class="form-label">Marca</label>
       <select class="form-select" [(ngModel)]="selectedCategory" (change)="filterProducts()">
-        <option value="">Marca</option>
+        <option value="">Todas</option>
         <option>BMW</option>
         <option>MERCEDES</option>
         <option>MINI</option>
@@ -15,7 +15,6 @@
     <div class="col-md-4">
       <label class="form-label">Tipo</label>
       <select class="form-select" [(ngModel)]="selectedType" (change)="filterProducts()">
-        <option value="">Todos los tipos</option>
         <option *ngFor="let type of types" [value]="type">{{ type }}</option>
       </select>
     </div>

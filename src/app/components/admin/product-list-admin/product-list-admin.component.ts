@@ -16,13 +16,13 @@ export class ProductListAdminComponent {
   products: Product[] = [];
   filtered: Product[] = [];
 
-  // Filtros
   searchTerm = '';
-  selectedCategory = '';
-  selectedType = '';
+  selectedCategory = 'Todas';
+  selectedType = 'Todos';
 
-  brandOptions = ['BMW', 'MERCEDES', 'MINI'];
+  brandOptions = ['Todas', 'BMW', 'MERCEDES', 'MINI'];
   typeOptions = [
+    'Todos',
     'Motores y componentes',
     'Transmision y cajas de cambio',
     'Sistemas de frenado',
@@ -36,7 +36,7 @@ export class ProductListAdminComponent {
   constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit() {
-    this.load();
+    void this.load();
   }
 
   async load() {
@@ -55,13 +55,33 @@ export class ProductListAdminComponent {
     await this.load();
   }
 
-  filterProducts(): void {
-    const term = this.searchTerm.trim().toLowerCase();
-    this.filtered = this.products.filter(p => {
-      const matchesBrand = this.selectedCategory ? p.category.toLowerCase() === this.selectedCategory.toLowerCase() : true;
-      const matchesType = this.selectedType ? p.type === this.selectedType : true;
-      const matchesSearch = term ? (p.name.toLowerCase().includes(term) || (p.description || '').toLowerCase().includes(term)) : true;
-      return matchesBrand && matchesType && matchesSearch;
-    });
-  }
+filterProducts(): void {
+  const term = this.searchTerm.trim().toLowerCase();
+  const selected = this.selectedCategory.trim().toLowerCase();
+  const selectedIsUniversal = !selected || selected === 'todos' || selected === 'todas';
+
+  this.filtered = this.products.filter(p => {
+    const brand = (p.category || '').trim().toLowerCase();
+
+    const matchesBrand =
+      selectedIsUniversal ||
+      brand === selected ||
+      brand === 'todas' ||
+      brand === 'todos';
+
+    const matchesType =
+      !this.selectedType ||
+      this.selectedType === 'Todos' ||
+      p.type === this.selectedType ||
+      p.type === 'Todos';
+
+    const matchesSearch = term
+      ? (p.name.toLowerCase().includes(term) ||
+         (p.description || '').toLowerCase().includes(term))
+      : true;
+
+    return matchesBrand && matchesType && matchesSearch;
+  });
+}
+
 }

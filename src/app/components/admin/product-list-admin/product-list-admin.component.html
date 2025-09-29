@@ -10,14 +10,12 @@
     <div class="col-12 col-md-4">
       <label class="form-label">Marca</label>
       <select class="form-select" [(ngModel)]="selectedCategory" (change)="filterProducts()">
-        <option value="">Todas</option>
         <option *ngFor="let b of brandOptions" [value]="b">{{ b }}</option>
       </select>
     </div>
     <div class="col-12 col-md-4">
       <label class="form-label">Tipo</label>
       <select class="form-select" [(ngModel)]="selectedType" (change)="filterProducts()">
-        <option value="">Todos</option>
         <option *ngFor="let t of typeOptions" [value]="t">{{ t }}</option>
       </select>
     </div>

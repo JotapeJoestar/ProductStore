@@ -14,6 +14,7 @@ import { Router, NavigationEnd } from '@angular/router';
 export class AppComponent {
   isDarkMode = false;
   isAdminAuthed = false;
+  navCollapsed = true;
 
   get whatsappHref(): string {
     // Usa API de WhatsApp que redirige a Web o App según el entorno
@@ -26,6 +27,7 @@ export class AppComponent {
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
         this.updateLayoutForRoute(ev.urlAfterRedirects);
+        this.closeNavbar();
       }
     });
     // Evaluar layout también en la primera carga
@@ -45,6 +47,14 @@ export class AppComponent {
       const now = Date.now(); const exp = Number(expStr); if (!isNaN(exp) && now > exp) valid = false;
     }
     this.isAdminAuthed = isAdmin && valid && url !== '/admin/login';
+  }
+
+  toggleNavbar(): void {
+    this.navCollapsed = !this.navCollapsed;
+  }
+
+  closeNavbar(): void {
+    this.navCollapsed = true;
   }
 
   toggleDarkMode(): void {

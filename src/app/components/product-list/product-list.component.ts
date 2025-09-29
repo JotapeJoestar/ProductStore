@@ -62,6 +62,7 @@ export class ProductListComponent {
 
     this.categories = [...new Set(this.products.map(p => p.category))];
     this.types = [
+      'Todos',
       'Motores y componentes',
       'Transmision y cajas de cambio',
       'Sistemas de frenado',
@@ -71,29 +72,46 @@ export class ProductListComponent {
       'Frenos y pastillas',
       'Alternadores y generadores'
     ];
-
+    
+    this.selectedType = 'Todos';
     this.filterProducts();
     this.initialized = true;
   }
 
-  filterProducts(): void {
-    if (!this.initialized) {
-      return;
-    }
-
-    this.filteredProducts = this.products.filter(product => {
-      const matchesBrand = this.selectedCategory ? product.category.toLowerCase() === this.selectedCategory.toLowerCase() : true;
-      const term = this.searchTerm.trim().toLowerCase();
-      const matchesSearch = term
-        ? (product.name.toLowerCase().includes(term) || (product.description || '').toLowerCase().includes(term))
-        : true;
-      const matchesCategory = this.selectedCategory ? product.category === this.selectedCategory : true;
-      const matchesType = this.selectedType ? product.type === this.selectedType : true;
-      const matchesPrice = this.maxPrice ? product.price <= this.maxPrice : true;
-
-      return matchesBrand && matchesSearch && matchesType && matchesPrice;
-    });
+filterProducts(): void {
+  if (!this.initialized) {
+    return;
   }
+
+  const selected = this.selectedCategory.trim().toLowerCase();
+  const selectedIsUniversal = !selected || selected === 'todos' || selected === 'todas';
+  const term = this.searchTerm.trim().toLowerCase();
+
+  this.filteredProducts = this.products.filter(product => {
+    const brandValue = (product.category || '').trim().toLowerCase();
+
+    const matchesBrand =
+      selectedIsUniversal ||
+      brandValue === selected ||
+      brandValue === 'todas' ||
+      brandValue === 'todos';
+
+    const matchesSearch = term
+      ? (product.name.toLowerCase().includes(term) ||
+         (product.description || '').toLowerCase().includes(term))
+      : true;
+
+    const matchesType =
+      !this.selectedType ||
+      this.selectedType === 'Todos' ||
+      product.type === this.selectedType ||
+      product.type === 'Todos';
+
+    const matchesPrice = this.maxPrice ? product.price <= this.maxPrice : true;
+
+    return matchesBrand && matchesSearch && matchesType && matchesPrice;
+  });
+}
 
   viewDetails(productId: number): void {}
 

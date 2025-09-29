@@ -30,8 +30,9 @@ export class ProductFormComponent {
   formSubmitted = false;
   isSaving = false;
 
-  brandOptions = ['BMW', 'MERCEDES', 'MINI'];
+  brandOptions = ['Todas','BMW', 'MERCEDES', 'MINI'];
   typeOptions = [
+    'Todos',
     'Motores y componentes',
     'Transmision y cajas de cambio',
     'Sistemas de frenado',
