@@ -55,22 +55,20 @@
   <h3 class="mb-3 text-uppercase text-center text-white section-title">PRODUCTOS DESTACADOS</h3>
   <div id="featuredCarousel" class="carousel slide featured-carousel">
     <div class="carousel-inner">
-      <div class="carousel-item" *ngFor="let _ of featured; let i = index" [class.active]="i === 0">
-        <div class="row g-3">
-          <div class="col-12 col-md-4" *ngFor="let offset of [0,1,2]">
-            <ng-container *ngIf="featured[(i + offset) % featured.length] as p">
-              <div class="card h-100 shadow-sm" role="button" (click)="openProduct(p.id)">
-                <img [src]="p.image" class="card-img-top" [alt]="p.name">
-                <div class="card-body">
-                  <h5 class="card-title mb-1">{{ p.name }}</h5>
-                  <p class="card-text small text-muted mb-2">{{ p.category }} • {{ p.type }}</p>
-                  <p class="card-text text-truncate">{{ p.description }}</p>
-                  <div class="d-flex justify-content-end align-items-center mt-2">
-                    <button class="btn btn-outline-yellow" (click)="$event.stopPropagation(); openProduct(p.id)">Ver detalle</button>
-                  </div>
+      <div class="carousel-item" *ngFor="let slide of featuredSlides; let i = index" [class.active]="i === 0">
+        <div class="row g-3 justify-content-center">
+          <div class="col-12 col-sm-6 col-lg-3" *ngFor="let p of slide">
+            <div class="card h-100 shadow-sm" role="button" (click)="openProduct(p.id)">
+              <img [src]="p.image" class="card-img-top" [alt]="p.name">
+              <div class="card-body">
+                <h5 class="card-title mb-1">{{ p.name }}</h5>
+                <p class="card-text small mb-2">{{ p.category }} &bull; {{ p.type }}</p>
+                <p class="card-text text-truncate">{{ p.description }}</p>
+                <div class="d-flex justify-content-end align-items-center mt-2">
+                  <button class="btn btn-outline-yellow" (click)="$event.stopPropagation(); openProduct(p.id)">Ver detalle</button>
                 </div>
               </div>
-            </ng-container>
+            </div>
           </div>
         </div>
       </div>
@@ -106,3 +104,11 @@
     <i class="bi bi-tiktok"></i>
   </a>
 </div> -->
+
+
+
+
+
+
+
+

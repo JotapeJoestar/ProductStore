@@ -32,3 +32,11 @@
   background-color: #E8A700;
 }
 
+:host-context(.dark-mode) .about-card {
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.96) 0%, rgba(28, 28, 32, 0.96) 100%);
+  border-color: rgba(205, 205, 205, 0.25);
+}
+
+:host-context(.dark-mode) .about-card .info-banner {
+  color: #ffffff;
+}

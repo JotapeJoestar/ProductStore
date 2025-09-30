@@ -1,18 +1,45 @@
 /* Dark mode readability for product list cards */
-.dark-mode {
+:host-context(.dark-mode) {
+  .card {
+    background-color: rgba(8, 8, 8, 0.95);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+  }
+
   .card .card-title,
   .card .card-text {
     color: var(--text-color) !important;
   }
-  .card .btn-outline-yellow,
+
+  .card .btn-outline-yellow {
+    background-color: transparent;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+
+  .card .btn-outline-yellow:hover,
+  .card .btn-outline-yellow:focus {
+    background-color: rgba(205, 205, 205, 0.85);
+    border-color: rgba(255, 255, 255, 0.32);
+    color: #ffffff;
+  }
+
   .card .btn-outline-brand {
-    background: var(--btn-bg);
-    color: var(--btn-color);
-    border-color: var(--btn-bg);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.85);
+    background-color: transparent;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .card .btn-outline-brand:hover,
+  .card .btn-outline-brand:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5);
   }
 }
-
-/* Labels de filtros en blanco */
 .filters .form-label {
   color: #ffffff !important;
 }

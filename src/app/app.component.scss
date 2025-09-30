@@ -19,6 +19,28 @@
   }
 }
 
+:host-context(.dark-mode) .navbar .nav-link {
+  color: #f1f1f1 !important;
+}
+
+:host-context(.dark-mode) .navbar .nav-link:hover,
+:host-context(.dark-mode) .navbar .nav-link:focus,
+:host-context(.dark-mode) .navbar .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+:host-context(.dark-mode) .navbar .btn-outline-dark {
+  color: #f1f1f1;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+:host-context(.dark-mode) .navbar .btn-outline-dark:hover,
+:host-context(.dark-mode) .navbar .btn-outline-dark:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #111111;
+  border-color: rgba(255, 255, 255, 0.45);
+}
 /* Admin top bar */
 .admin-topbar {
   position: fixed;
@@ -27,31 +49,13 @@
   z-index: 1100;
   display: flex;
   align-items: center;
-}
-
-/* Dark mode fixes for navbar collapse and footer */
-.dark-mode {
-  .navbar .navbar-collapse {
-    background-color: var(--card-bg) !important;
-  }
-  footer.bg-light {
-    background-color: #1e1e1e !important;
-    color: var(--text-color) !important;
-    border-top-color: var(--border-color) !important;
-  }
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(15, 43, 88, 0.15);
+  backdrop-filter: blur(8px);
 }
 
 
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url("/assets/images/carro.jpg") no-repeat center center fixed;
-  background-size: cover;
-  z-index: -1;
-  opacity: 0.3;
-  filter: blur(2px); 
-}

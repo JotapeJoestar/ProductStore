@@ -28,7 +28,7 @@
     color: var(--text-color);
   }
 
-  /* Botón corporativo */
+  /* Boton corporativo */
   .btn-outline-brand {
     color: var(--btn-bg);
     border: 2px solid var(--btn-bg);
@@ -114,7 +114,7 @@
   color: var(--text-color);
 }
 
-/* Tarjeta principal con borde degradado y mejor separación */
+/* Tarjeta principal con borde degradado y mejor separacion */
 .hero-card {
   border: 2px solid transparent;
   border-radius: 14px;
@@ -133,12 +133,45 @@
   }
 }
 
-/* Dark mode: force contrast on action button */
-.dark-mode {
+/* Dark mode surfaces */
+:host-context(.dark-mode) {
+  .hero-card {
+    background-image:
+      linear-gradient(rgba(8, 8, 8, 0.95), rgba(8, 8, 8, 0.95)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(232, 167, 0, 0.35) 100%);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.55);
+  }
+
+  .card:not(.hero-card) {
+    background-color: rgba(8, 8, 8, 0.95);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .main-image-container,
+  .zoom-viewer {
+    background-color: rgba(8, 8, 8, 0.95);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .thumbs-vertical .thumb {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
   .card .btn-outline-brand {
-    background: var(--btn-bg);
-    color: var(--btn-color);
-    border-color: var(--btn-bg);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.85);
+    background-color: transparent;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .card .btn-outline-brand:hover,
+  .card .btn-outline-brand:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5);
   }
 }
 

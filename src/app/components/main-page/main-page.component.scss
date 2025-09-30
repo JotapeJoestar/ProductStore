@@ -25,67 +25,75 @@
 
     .carousel-control-prev,
     .carousel-control-next {
-        width: 40px;
-        height: 40px;
+        width: 48px;
+        height: 48px;
         top: 50%;
         transform: translateY(-50%);
-        background-color: rgb(255, 255, 255);
+        background-color: #ffffff;
         border-radius: 50%;
         padding: 0;
         opacity: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.3s ease;
-        z-index: 2;
-
-        &.carousel-control-prev {
-            left: 1rem;
-        }
-
-        &.carousel-control-next {
-            right: 1rem;
-        }
-    }
-
-    .carousel-control-prev:hover,
-    .carousel-control-next:hover {
-        background-color: #E8A700;
-    }
-
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        background-size: 60% 60%;
-        filter: invert(1);
-    }
-
-
-    .full-width-carousel {
-        width: 100vw;
-        margin-left: calc(-50vw + 50%);
-        position: relative;
-    }
-
-    .carousel-item img {
-        width: 100%;
-        height: 500px;
-        object-fit: cover;
-    }
-
-    input.form-control,
-    select.form-select {
-        border-radius: 0.5rem;
-        box-shadow: none;
-        transition: box-shadow 0.2s;
-
+        transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 8px 18px rgba(15, 43, 88, 0.25);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        &:hover,
         &:focus {
-            box-shadow: 0 0 0 0.2rem #E8A700;
-            border-color: #E8A700;
+            background-color: #f1f1f1;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
         }
+        &:active {
+            background-color: #d2d2d2;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+        }
+    }
+
+    &.carousel-control-next {
+        right: 1rem;
     }
 }
 
-// Botones de marcas
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 22px;
+    height: 22px;
+    background-size: 65% 65%;
+    filter: none;
+    opacity: 0.85;
+}
+
+
+.full-width-carousel {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    position: relative;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+input.form-control,
+select.form-select {
+    border-radius: 0.5rem;
+    box-shadow: none;
+    transition: box-shadow 0.2s;
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem #E8A700;
+        border-color: #E8A700;
+    }
+}
+
 .brand-btn {
     display: flex;
     align-items: center;
@@ -130,67 +138,162 @@
     background-color: #222222;
 }
 
-// Botón "Buscar todos"
 .all {
-    background-color: #6c757d; // gris
+    background-color: #6c757d; 
 }
 
-/* Dark mode: mejorar contraste de tarjetas en destacados */
-.dark-mode {
-    .featured-carousel .card .card-title,
-    .featured-carousel .card .card-text {
-        color: var(--text-color) !important;
-    }
-    .featured-carousel .card .btn-outline-yellow,
-    .featured-carousel .card .btn-outline-brand {
-        background: var(--btn-bg);
-        color: var(--btn-color);
-        border-color: var(--btn-bg);
-    }
-}
 
-/* Controles del carrusel de destacados con el mismo estilo del hero */
 .featured-carousel {
     .carousel-control-prev,
     .carousel-control-next {
-        width: 40px;
-        height: 40px;
+        width: 48px;
+        height: 48px;
         top: 50%;
         transform: translateY(-50%);
-        background-color: rgb(255, 255, 255);
+        background-color: #ffffff;
         border-radius: 50%;
         padding: 0;
         opacity: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.3s ease;
-        z-index: 2;
+        transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 8px 18px rgba(15, 43, 88, 0.25);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        &:hover,
+        &:focus {
+            background-color: #f1f1f1;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+        }
+        &:active {
+            background-color: #d2d2d2;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+        }
     }
 
     .carousel-control-prev:hover,
     .carousel-control-next:hover {
-        background-color: #E8A700;
+        transform: translateY(-50%) scale(1.05);
     }
 
     .carousel-control-prev-icon,
     .carousel-control-next-icon {
-        background-size: 60% 60%;
-        filter: invert(1);
+        width: 22px;
+        height: 22px;
+        background-size: 65% 65%;
+        filter: none;
+        opacity: 0.85;
+    }
+
+    .carousel-control-prev {
+        left: -2.75rem;
+    }
+
+    .carousel-control-next {
+        right: -2.75rem;
     }
 }
 
-/* Línea decorativa bajo títulos de sección */
-.section-title {
-    position: relative;
+.featured-carousel .card {
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.section-title::after {
-    content: '';
-    display: block;
-    width: 120px;
-    height: 4px;
-    background-color: #E8A700; /* acento corporativo */
-    border-radius: 2px;
-    margin: 10px auto 0; /* centrado */
+.featured-carousel .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(15, 43, 88, 0.25);
+}
+
+.featured-carousel .card-img-top {
+    height: clamp(130px, 16vw, 170px);
+    object-fit: cover;
+}
+
+.featured-carousel .card-body {
+    padding: 0.9rem;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+}
+
+.featured-carousel .card-body .card-text {
+    flex-grow: 1;
+}
+
+@media (max-width: 992px) {
+    .featured-carousel .carousel-control-prev {
+        left: -1.4rem;
+    }
+
+    .featured-carousel .carousel-control-next {
+        right: -1.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .featured-carousel .carousel-control-prev,
+    .featured-carousel .carousel-control-next {
+        width: 42px;
+        height: 42px;
+        box-shadow: 0 6px 14px rgba(15, 43, 88, 0.25);
+    }
+
+    .featured-carousel .carousel-control-prev {
+        left: -1rem;
+    }
+
+    .featured-carousel .carousel-control-next {
+        right: -1rem;
+    }
+}
+
+:host-context(.dark-mode) {
+    .featured-carousel .card {
+        background: rgba(8, 8, 8, 0.95);
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .featured-carousel .card .card-title,
+    .featured-carousel .card .card-text {
+        color: var(--text-color);
+    }
+
+    .brand-btn {
+        color: #ffffff;
+        border: 2px solid rgba(255, 255, 255, 0.85);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+    }
+
+    .brand-btn:hover,
+    .brand-btn:focus {
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+    }
+
+    .brand-btn.all {
+        border-color: rgba(255, 255, 255, 0.72);
+    }
+
+    .btn-outline-yellow {
+        background-color: transparent;
+        color:white;
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-outline-yellow:hover,
+    .btn-outline-yellow:focus {
+        background-color: rgba(205, 205, 205, 0.85);
+        border-color: rgba(255, 255, 255, 0.32);
+        color: var(--btn-bg);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+    }
+}
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 16 16'%3E%3Cpath d='M11.354 1.354a.5.5 0 0 1 0 .708L5.707 7l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 1.354a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
 }

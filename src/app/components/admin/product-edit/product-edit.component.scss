@@ -19,3 +19,26 @@ input:focus, textarea:focus, select:focus {
 
 .btn-group.btn-group-sm .btn { padding: 0.1rem 0.25rem; line-height: 1; }
 
+.admin-logo {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 1rem;
+
+  img {
+    width: clamp(140px, 35vw, 220px);
+    height: auto;
+    max-height: 110px;
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-logo {
+    margin: 1rem 0;
+
+    img {
+      width: clamp(140px, 55vw, 200px);
+      max-height: 96px;
+    }
+  }
+}
